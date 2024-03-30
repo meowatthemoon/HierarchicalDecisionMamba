@@ -151,6 +151,8 @@ def train(env_name : str, dataset_name : str, batch_size : int, high_d_model : i
             val_lengths_mean.append(np.mean(lengths))
             val_lengths_std.append(np.std(lengths))
 
+            print(f"{env_name}-{dataset_name} | {iteration + 1} / {iterations} | Val = {val_rewards_mean[-1]:.2f} | Total = {dataset.max_ep_rew}")
+
     # Save Results
     with open(os.path.join(RESULTS_PATH, f"{experiment_name}.json"), "w") as f:
         json.dump({
