@@ -20,8 +20,8 @@ def eval_episodes(env, high_model : HighDecisionMamba, low_model : LowDecisionMa
     low_model.eval()
     low_model.to(device = device)
 
-    state_mean = torch.from_numpy(state_mean).to(device = device)
-    state_std = torch.from_numpy(state_std).to(device = device)
+    state_mean = torch.from_numpy(state_mean).to(device = device, dtype = torch.float32)
+    state_std = torch.from_numpy(state_std).to(device = device, dtype = torch.float32)
     soa = np.zeros((1, action_size), dtype = np.float32)
     sos = np.zeros((1, state_size), dtype = np.float32)
 
