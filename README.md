@@ -40,7 +40,7 @@ pip install mamba-ssm
 Train Hierarchical Decision Mamba
 
 ```
-python3 train_hierarchical_decision_mamba.py  --env_name ant --dataset medium-expert --high_n_layer 6 --high_d_model 128 --low_n_layer 6 --low_d_model 128 --K 20
+python3 train_hierarchical_decision_mamba.py --seed 99 --env_name ant --dataset medium-expert --high_n_layer 6 --high_d_model 128 --low_n_layer 6 --low_d_model 128 --K 20
 ```
 
 ## Citation
