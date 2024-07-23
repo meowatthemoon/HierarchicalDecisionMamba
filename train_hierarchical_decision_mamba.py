@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import random
 
 import d4rl
 import gym
@@ -13,6 +14,13 @@ from models.high_decision_mamba import HighDecisionMamba
 from models.low_decision_mamba import LowDecisionMamba
 
 RESULTS_PATH = "./Results/HierarchicalDecisionMamba"
+
+def set_seed_everywhere(seed : int):
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
 
 def eval_episodes(env, high_model : HighDecisionMamba, low_model : LowDecisionMamba, num_eval_episodes, max_ep_len, action_range : float, action_size : int, state_size : int, state_mean : float, state_std : float, sequence_length : int,device):
     high_model.eval()
@@ -72,9 +80,11 @@ def eval_episodes(env, high_model : HighDecisionMamba, low_model : LowDecisionMa
     return episode_returns, episode_lengths
 
 
-def train(env_name : str, dataset_name : str, batch_size : int, high_d_model : int, high_n_layer : int, low_d_model : int, low_n_layer : int, eval_every : int, iterations : int, lr : float, num_eval_episodes : int, sequence_length : int, weight_decay : float, warmup_steps : int):
-    experiment_name = f'{env_name}_{dataset_name}_E{iterations}_HD{high_d_model}_HL{high_n_layer}_LD{low_d_model}_LL{low_n_layer}_K{sequence_length}'
+def train(seed : int, env_name : str, dataset_name : str, batch_size : int, high_d_model : int, high_n_layer : int, low_d_model : int, low_n_layer : int, eval_every : int, iterations : int, lr : float, num_eval_episodes : int, sequence_length : int, weight_decay : float, warmup_steps : int):
+    experiment_name = f'{env_name}_{dataset_name}_S{seed}_E{iterations}_HD{high_d_model}_HL{high_n_layer}_LD{low_d_model}_LL{low_n_layer}_K{sequence_length}'
     os.makedirs(RESULTS_PATH, exist_ok = True)
+
+    set_seed_everywhere(seed = seed)
 
     dtype = torch.float32
     dataset : Dataset = Dataset(env_name = env_name, dataset = dataset_name, scale = 1000, dtype = dtype)
@@ -167,6 +177,7 @@ def train(env_name : str, dataset_name : str, batch_size : int, high_d_model : i
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", type = int)
     parser.add_argument("--env_name", type = str)
     parser.add_argument("--dataset", type = str)
     parser.add_argument("--batch_size", type = int, default = 16)
@@ -184,6 +195,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     train(
+        seed = args.seed, 
         env_name = args.env_name, 
         dataset_name = args.dataset, 
         batch_size = args.batch_size, 
