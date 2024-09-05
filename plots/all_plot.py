@@ -20,7 +20,7 @@ f, (ax1, ax2, ax3, ax4, ax5, ax6, ax7) = plt.subplots(1, 7, sharex='col', sharey
 ant_dt = [
     2731.52 / ANT_EXPERT,
 	801.41 / ANT_MEDIUM,
-    2738.68 / ANT_MEDIUM_EXPERT,	
+    2718.68 / ANT_MEDIUM_EXPERT,	
     732.89 / ANT_MEDIUM_REPLAY
 ]
 ant_hdt = [
@@ -80,7 +80,7 @@ ax1.set_xticks(_4_RANGES, d_names, color='black', fontsize = FONT_SIZE)
 antmaze_dt = [
     0.05, 
     0.18, 
-    0.98, 
+    0.92, 
     0.95
 ]
 antmaze_hdt = [
